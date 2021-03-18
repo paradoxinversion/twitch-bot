@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.12.0",
+    "tmi.js": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "start": "nodemon bot.js"
+  }
+}
