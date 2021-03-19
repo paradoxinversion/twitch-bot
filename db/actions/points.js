@@ -1,29 +1,37 @@
+const StreamInfo = require("../models/StreamInfo");
 const { getTwitchUser, addTwitchUser } = require("./user");
 
-async function setUserPoints(twitchUserId, userPoints) {
-  let user = await getTwitchUser(twitchUserId);
+async function setStreamInfoPoints(points) {
+  const streamInfo = await StreamInfo.findOne({});
+  streamInfo.chatBasePoints = points;
+  streamInfo.save();
+  return streamInfo.chatBasePoints;
+}
+
+async function setUserPoints(twitchUserState, userPoints) {
+  let user = await getTwitchUser(twitchUserState);
   if (!user) {
-    user = await addTwitchUser(twitchUserId);
+    user = await addTwitchUser(twitchUserState);
   }
   user.userPoints = userPoints;
   await user.save();
   return user.userPoints;
 }
 
-async function increaseUserPoints(twitchUserId, increase) {
-  let user = await getTwitchUser(twitchUserId);
+async function increaseUserPoints(twitchUserState, increase) {
+  let user = await getTwitchUser(twitchUserState);
   if (!user) {
-    user = await addTwitchUser(twitchUserId);
+    user = await addTwitchUser(twitchUserState);
   }
   user.userPoints = user.userPoints += increase;
   await user.save();
   return user.userPoints;
 }
 
-async function decreaseUserPoints(twitchUserId, decrease) {
-  let user = await getTwitchUser(twitchUserId);
+async function decreaseUserPoints(twitchUserState, decrease) {
+  let user = await getTwitchUser(twitchUserState);
   if (!user) {
-    user = await addTwitchUser(twitchUserId);
+    user = await addTwitchUser(twitchUserState);
   }
   user.userPoints = user.userPoints -= decrease;
   if (user.userPoints < 0) user.userPoints = 0;
@@ -32,12 +40,12 @@ async function decreaseUserPoints(twitchUserId, decrease) {
 }
 
 // This is different from decrease, as it only works if the user has the right amount
-async function spendUserPoints(twitchUserId, pointsToSpend) {
-  let user = await getTwitchUser(twitchUserId);
+async function spendUserPoints(twitchUserState, pointsToSpend) {
+  let user = await getTwitchUser(twitchUserState);
   if (!user) {
-    user = await addTwitchUser(twitchUserId);
+    user = await addTwitchUser(twitchUserState);
   }
-  if (user.userPonts >= pointsToSpend) {
+  if (user.userPoints >= pointsToSpend) {
     user.userPoints = user.userPoints -= pointsToSpend;
     await user.save();
     return user.userPoints;
@@ -51,4 +59,5 @@ module.exports = {
   increaseUserPoints,
   decreaseUserPoints,
   spendUserPoints,
+  setStreamInfoPoints,
 };
