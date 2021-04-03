@@ -81,12 +81,19 @@ async function muteToggle(obs, twitchUserState, client, channel) {
   }
 }
 
-async function getRotatingMessages(client, channel) {
+async function getRotatingMessages(client, username) {
   try {
     const messages = await RotatingMessage.find({})
       .select("text interval")
       .lean();
-    client.say(channel, `Messages: ${messages.map((msg) => msg.text)}`);
+    console.log(username);
+    await client.whisper(
+      username,
+      `Messages: ${messages.map(
+        (msg) => `${msg.text} | ${msg._id} | ${msg.interval}`
+      )}`
+    );
+    await client.whisper("jedaisaboteur", `Messages`);
   } catch (e) {
     console.log(e);
   }
