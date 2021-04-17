@@ -18,7 +18,11 @@ const deleteRotatingMessage = async (messageId) => {
   }
 };
 
+const getRotatingMessages = async () => {
+  return await RotatingMessage.find({}).lean();
+};
 module.exports = {
   addRotatingMessage,
   deleteRotatingMessage,
+  getRotatingMessages,
 };

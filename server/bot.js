@@ -1,8 +1,12 @@
-require("dotenv").config();
+const botIsEntryPoint = require.main === module;
+if (botIsEntryPoint) {
+  require("dotenv").config();
+  const startClient = require("./db/client");
+  startClient();
+}
 const tmi = require("tmi.js");
 const OBSWebSocket = require("obs-websocket-js");
 
-const startClient = require("./db/client");
 const onJoinHandler = require("./handlers/twitchClient/onJoinHandler");
 const onTwitchMessage = require("./handlers/twitchClient/onTwitchMessage");
 const onConnected = require("./handlers/twitchClient/onConnected");
@@ -10,8 +14,6 @@ const onConnected = require("./handlers/twitchClient/onConnected");
 const rotatingMessages = require("./modules/rotatingMessages");
 const onCheer = require("./handlers/twitchClient/onCheer");
 const monsterHunt = require("./modules/monsterHunt");
-
-startClient();
 
 // Define configuration options
 const twitchClientOpts = {
@@ -39,3 +41,8 @@ twitchClient.on("connected", onConnected);
 twitchClient.on("join", onJoinHandler);
 twitchClient.on("cheer", onCheer);
 twitchClient.connect();
+
+module.exports = {
+  starlaMonsterHunt: mh,
+  starlaAnnouncements: rms,
+};
