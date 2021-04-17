@@ -45,7 +45,7 @@ export default function Announcements(props) {
           {announcements.map((annoucement) => {
             const intervalTime = convertMilliseconds(annoucement.interval);
             return (
-              <tr>
+              <tr key={annoucement._id}>
                 <td className="border p-2">{annoucement.text}</td>
                 <td className="border p-2">
                   {`${intervalTime.h}hrs ${intervalTime.m}mins ${intervalTime.s}s`}

@@ -98,6 +98,15 @@ async function getRotatingMessages(client, username) {
     console.log(e);
   }
 }
+
+async function firstdraft(client, channel) {
+  client.say(channel, "@JedaiSaboteur should not be editing right now.");
+}
+
+async function getUserPoints(client, channel, userId) {
+  const user = await User.findById(userId);
+  client.say(channel, `@${user.username}, you have ${user.userPoints} points.`);
+}
 module.exports = {
   grantViewerPoints,
   setStreamDescription,
@@ -106,4 +115,6 @@ module.exports = {
   showLeaders,
   muteToggle,
   getRotatingMessages,
+  firstdraft,
+  getUserPoints,
 };

@@ -6,6 +6,8 @@ const {
   showLeaders,
   muteToggle,
   getRotatingMessages,
+  firstdraft,
+  getUserPoints,
 } = require("../../commands");
 const {
   addRotatingMessage,
@@ -56,6 +58,11 @@ async function onTwitchMessage(
         await returnStreamDescription(twitchClient, channel);
         break;
       }
+
+      case "firstdraft": {
+        await firstdraft(twitchClient, channel);
+        break;
+      }
       case "set-description": {
         if (isBroadcaster) {
           const streamInfo = args.join(" ");
@@ -63,6 +70,7 @@ async function onTwitchMessage(
         }
         break;
       }
+
       case "set-points": {
         if (isBroadcaster) {
           const newPoints = await setStreamInfoPoints(args[0]);
@@ -73,6 +81,10 @@ async function onTwitchMessage(
             }!`
           );
         }
+        break;
+      }
+      case "my-points": {
+        await getUserPoints(twitchClient, channel, userState["user-id"]);
         break;
       }
       case "add-rotating-message": {
